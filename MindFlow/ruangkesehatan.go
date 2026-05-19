@@ -65,15 +65,21 @@ func main() {
 
 	fmt.Println("======================================================================")
 	fmt.Println("   Halo! Selamat datang di CekKesehatanMental - Asisten Virtual Anda ")
-	fmt.Println("             dan Produktivitas Harian Anda              ")
+	fmt.Println("             dan Produktivitas Harian Anda               ")
 	fmt.Println("======================================================================")
 
-	// Interaksi Awal Asisten Virtual
-	asistenCheckIn(reader)
+	// Meminta input Nama Pengguna di awal program
+	namaUser := readInput(reader, "Sebelum kita mulai, boleh tahu nama Anda? ")
+	if namaUser == "" {
+		namaUser = "Pengguna" // Nilai default jika nama dikosongkan
+	}
+
+	// Interaksi Awal Asisten Virtual (Mengirimkan variabel namaUser)
+	asistenCheckIn(reader, namaUser)
 
 	jalankanMenu := true
 	for jalankanMenu {
-		fmt.Println("\n>>> [MENU UTAMA CEKKESEHATANMENTAL] <<<")
+		fmt.Printf("\n>>> [MENU UTAMA CEKKESEHATANMENTAL - Halo, %s!] <<<\n", namaUser)
 		fmt.Println("1. Kelola Catatan Suasana Hati (Mood)")
 		fmt.Println("2. Kelola Daftar Tugas Harian (Task)")
 		fmt.Println("3. Cari Data (Tugas / Catatan Emosi)")
@@ -94,7 +100,7 @@ func main() {
 		case "5":
 			tampilkanStatistik()
 		case "6":
-			fmt.Println("\n[CekKesehatanMental]: Terima kasih sudah berproses hari ini. Jangan lupa menjaga kesehatan mentalmu!")
+			fmt.Printf("\n[CekKesehatanMental]: Terima kasih sudah berproses hari ini, %s. Jangan lupa menjaga kesehatan mentalmu!\n", namaUser)
 			jalankanMenu = false
 		default:
 			fmt.Println("\n[CekKesehatanMental]: Pilihan tidak tersedia, coba masukkan angka 1-6 ya.")
@@ -104,9 +110,9 @@ func main() {
 
 // ================= INTERAKSI ASISTEN VIRTUAL =================
 
-func asistenCheckIn(reader *bufio.Reader) {
+func asistenCheckIn(reader *bufio.Reader, namaUser string) {
 	tglHariIni := time.Now().Format("2006-01-02")
-	fmt.Printf("\n[CekKesehatanMental]: Hari ini tanggal %s. Bagaimana keadaan hatimu sekarang?\n", tglHariIni)
+	fmt.Printf("\n[CekKesehatanMental]: Halo %s! Hari ini tanggal %s. Bagaimana keadaan hatimu sekarang?\n", namaUser, tglHariIni)
 	skorStr := readInput(reader, "Berikan skor emosimu hari ini (Skala 1-10): ")
 	skor, _ := strconv.Atoi(skorStr)
 	deskripsi := readInput(reader, "Ceritakan sedikit apa yang kamu rasakan hari ini: ")
@@ -116,7 +122,7 @@ func asistenCheckIn(reader *bufio.Reader) {
 		nMood++
 	}
 
-	fmt.Println("\n[CekKesehatanMental]: Terima kasih sudah berbagi cerita.")
+	fmt.Printf("\n[CekKesehatanMental]: Terima kasih sudah berbagi cerita, %s.\n", namaUser)
 	if skor <= 4 {
 		fmt.Println(">> Respon Asisten: Tampaknya hari ini cukup berat buatmu. Jangan terlalu memaksakan diri ya. <<")
 	} else if skor <= 7 {
